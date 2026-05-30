@@ -107,7 +107,7 @@ export const useUserStore = defineStore('user', () => {
     const { data: partners, error: lookupError } = await supabase
       .from('profiles')
       .select('*')
-      .ilike('id', `${inviteCode}%`)
+      .ilike('id::text', `${inviteCode}%`)
       .limit(1)
     if (lookupError) throw new Error(lookupError.message)
     const partner = partners?.[0] as Profile | undefined
