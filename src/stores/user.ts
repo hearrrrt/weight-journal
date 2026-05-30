@@ -102,25 +102,29 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function bindPartner(inviteCode: string) {
-    if (!user.value) return
-    const { data: partners, error } = await supabase
+    if (!user.value) throw new Error('请先登录')
+
+    const { data: partners, error: lookupError } = await supabase
       .from('profiles')
       .select('*')
       .ilike('id', `${inviteCode}%`)
       .limit(1)
-    if (error) throw error
+    if (lookupError) throw new Error(lookupError.message)
     const partner = partners?.[0] as Profile | undefined
     if (!partner) throw new Error('未找到该邀请码对应的用户')
     if (partner.id === user.value.id) throw new Error('不能绑定自己')
 
-    await supabase
+    const { error: updateError1 } = await supabase
       .from('profiles')
       .update({ partner_id: partner.id })
       .eq('id', user.value.id)
-    await supabase
+    if (updateError1) throw new Error(updateError1.message)
+
+    const { error: updateError2 } = await supabase
       .from('profiles')
       .update({ partner_id: user.value.id })
       .eq('id', partner.id)
+    if (updateError2) throw new Error(updateError2.message)
 
     await fetchProfile()
     await fetchPartnerProfile()

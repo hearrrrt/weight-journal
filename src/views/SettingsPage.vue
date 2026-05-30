@@ -52,11 +52,8 @@ async function handleBindPartner() {
     await userStore.bindPartner(inviteCodeInput.value.trim())
     inviteCodeInput.value = ''
   } catch (e: unknown) {
-    if (e instanceof Error) {
-      bindError.value = e.message
-    } else {
-      bindError.value = '绑定失败，请重试'
-    }
+    const msg = e instanceof Error ? e.message : String(e)
+    bindError.value = msg || '绑定失败，请重试'
   } finally {
     binding.value = false
   }
