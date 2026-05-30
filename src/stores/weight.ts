@@ -33,9 +33,9 @@ export const useWeightStore = defineStore('weight', () => {
     const sorted = [...logs.value].sort(
       (a, b) => new Date(b.log_date).getTime() - new Date(a.log_date).getTime()
     )
-    const latest = sorted[sorted.length - 1].weight
-    const previous = sorted[sorted.length - 2].weight
-    return latest - previous
+    const latest = sorted[0].weight
+    const previous = sorted[1].weight
+    return Number((latest - previous).toFixed(1))
   })
 
   const streakDays = computed(() => {
