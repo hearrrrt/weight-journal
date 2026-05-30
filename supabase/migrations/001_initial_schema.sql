@@ -8,7 +8,7 @@ CREATE TABLE profiles (
   id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
   nickname text,
   avatar_url text,
-  partner_id uuid REFERENCES profiles(id),
+  partner_id uuid REFERENCES profiles(id) ON DELETE SET NULL,
   created_at timestamptz DEFAULT now()
 );
 
@@ -18,7 +18,7 @@ CREATE TABLE profiles (
 CREATE TABLE weight_logs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  weight decimal(4,1) NOT NULL,
+  weight decimal(4,1) NOT NULL CHECK (weight > 0),
   mood text,
   log_date date NOT NULL DEFAULT CURRENT_DATE,
   created_at timestamptz DEFAULT now(),
@@ -34,7 +34,7 @@ CREATE TABLE goals (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   title text NOT NULL,
-  target_weight decimal(4,1) NOT NULL,
+  target_weight decimal(4,1) NOT NULL CHECK (target_weight > 0),
   reward text,
   status goal_status DEFAULT 'active',
   sort_order int DEFAULT 0,
@@ -60,7 +60,7 @@ CREATE TABLE cheers (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   from_user uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   to_user uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  weight_log_id uuid REFERENCES weight_logs(id) ON DELETE CASCADE,
+  weight_log_id uuid NOT NULL REFERENCES weight_logs(id) ON DELETE CASCADE,
   message text NOT NULL,
   created_at timestamptz DEFAULT now()
 );
@@ -68,9 +68,7 @@ CREATE TABLE cheers (
 -- ============================================================
 -- 索引 (Indexes)
 -- ============================================================
-CREATE INDEX idx_weight_logs_user_date ON weight_logs(user_id, log_date DESC);
 CREATE INDEX idx_goals_user ON goals(user_id, sort_order);
-CREATE INDEX idx_user_badges_user ON user_badges(user_id);
 CREATE INDEX idx_cheers_to_user ON cheers(to_user, created_at DESC);
 
 -- ============================================================
