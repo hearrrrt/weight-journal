@@ -3,6 +3,7 @@ export interface Profile {
   nickname: string | null
   avatar_url: string | null
   partner_id: string | null
+  invite_code: string | null
   created_at: string
 }
 

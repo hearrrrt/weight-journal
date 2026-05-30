@@ -13,7 +13,7 @@ const savingNickname = ref(false)
 const nicknameMessage = ref('')
 
 // Section 2: Partner binding
-const myInviteCode = userStore.user?.id.substring(0, 8) || ''
+const myInviteCode = computed(() => userStore.profile?.invite_code || '')
 const inviteCodeInput = ref('')
 const binding = ref(false)
 const bindError = ref('')

@@ -107,10 +107,10 @@ export const useUserStore = defineStore('user', () => {
     const { data: partners, error: lookupError } = await supabase
       .from('profiles')
       .select('*')
-      .ilike('id::text', `${inviteCode}%`)
-      .limit(1)
-    if (lookupError) throw new Error(lookupError.message)
-    const partner = partners?.[0] as Profile | undefined
+      .eq('invite_code', inviteCode)
+      .single()
+    if (lookupError) throw new Error('未找到该邀请码对应的用户')
+    const partner = partners as Profile | null
     if (!partner) throw new Error('未找到该邀请码对应的用户')
     if (partner.id === user.value.id) throw new Error('不能绑定自己')
 
