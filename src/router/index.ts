@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { supabase } from '@/lib/supabase'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,6 +40,18 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
   ],
+})
+
+router.beforeEach(async (to, _from, next) => {
+  const { data } = await supabase.auth.getSession()
+  const isLoggedIn = !!data.session
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next('/auth')
+  } else if (to.path === '/auth' && isLoggedIn) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
