@@ -454,7 +454,7 @@ onMounted(async () => {
 }
 
 .message.error {
-  background: #fff0f0;
+  background: #e0eff5;
   color: #e57373;
 }
 

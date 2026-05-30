@@ -31,6 +31,10 @@ function getGreeting() {
   return '晚上好'
 }
 
+const showConfirm = ref(false)
+const pendingWeight = ref(0)
+const pendingMood = ref('')
+
 async function handleSubmit() {
   errorMessage.value = ''
   successMessage.value = ''
@@ -53,11 +57,35 @@ async function handleSubmit() {
     moodInput.value = ''
     await badgesStore.checkAndAwardBadges()
   } catch (e: unknown) {
-    if (e instanceof Error) {
+    if (e instanceof Error && e.message === 'DUPLICATE_TODAY') {
+      // Already logged today — ask to confirm re-log
+      pendingWeight.value = weightInput.value!
+      pendingMood.value = moodInput.value || ''
+      showConfirm.value = true
+    } else if (e instanceof Error) {
       errorMessage.value = e.message
     } else {
       errorMessage.value = '打卡失败，请重试'
     }
+  } finally {
+    submitting.value = false
+  }
+}
+
+async function confirmRelog() {
+  showConfirm.value = false
+  submitting.value = true
+  try {
+    const todayLog = await weightStore.getTodayLog()
+    if (todayLog) {
+      await weightStore.updateLog(todayLog.id, pendingWeight.value, pendingMood.value || null)
+      successMessage.value = '打卡更新成功！'
+      weightInput.value = null
+      moodInput.value = ''
+      await badgesStore.checkAndAwardBadges()
+    }
+  } catch (e: unknown) {
+    errorMessage.value = '更新失败，请重试'
   } finally {
     submitting.value = false
   }
@@ -96,6 +124,7 @@ onMounted(async () => {
       :weight="weightStore.latestWeight"
       :change="weightStore.lastChange"
       :streak="weightStore.streakDays"
+      :mood="weightStore.latestMood"
       class="section"
     />
 
@@ -132,6 +161,21 @@ onMounted(async () => {
         {{ submitting ? '打卡中...' : '✨ 打卡记录' }}
       </button>
     </div>
+
+    <!-- Confirm re-log dialog -->
+    <Teleport to="body">
+      <div v-if="showConfirm" class="confirm-overlay" @click.self="showConfirm = false">
+        <div class="confirm-card">
+          <div class="confirm-emoji">🤔</div>
+          <p class="confirm-title">今天已经打过卡了</p>
+          <p class="confirm-desc">要用新数据覆盖吗？</p>
+          <div class="confirm-actions">
+            <button class="confirm-btn cancel" @click="showConfirm = false">取消</button>
+            <button class="confirm-btn ok" @click="confirmRelog">更新记录</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Progress Bar -->
     <ProgressBar
@@ -289,7 +333,7 @@ onMounted(async () => {
 }
 
 .message.error {
-  background: #fff0f0;
+  background: #e0eff5;
   color: #e57373;
 }
 
@@ -327,4 +371,47 @@ onMounted(async () => {
   color: var(--text);
   margin-bottom: 12px;
 }
+
+/* Confirm dialog */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 24px;
+  text-align: center;
+  max-width: 280px;
+  width: 90%;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.confirm-emoji { font-size: 48px; margin-bottom: 8px; }
+.confirm-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.confirm-desc { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+
+.confirm-actions { display: flex; gap: 10px; }
+.confirm-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.confirm-btn.cancel { background: #f5f5f5; color: var(--text-light); }
+.confirm-btn.ok { background: linear-gradient(135deg, var(--pink), var(--pink-light)); color: #fff; }
 </style>

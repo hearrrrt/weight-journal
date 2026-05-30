@@ -3,6 +3,7 @@ defineProps<{
   weight: number | null
   change: number | null
   streak: number
+  mood?: string | null
 }>()
 </script>
 
@@ -27,6 +28,9 @@ defineProps<{
           <span class="stat-label">天</span>
         </div>
       </div>
+      <div v-if="mood" class="mood-tag">
+        💬 {{ mood }}
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +43,7 @@ defineProps<{
   padding: 28px 24px;
   color: #fff;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(255, 154, 158, 0.3);
+  box-shadow: 0 8px 32px rgba(91, 173, 206, 0.3);
 }
 
 .watermark {
@@ -114,5 +118,15 @@ defineProps<{
 .stat-label {
   font-size: 12px;
   opacity: 0.75;
+}
+
+.mood-tag {
+  text-align: center;
+  margin-top: 12px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  font-size: 13px;
+  color: #fff;
 }
 </style>

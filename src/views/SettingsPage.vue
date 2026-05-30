@@ -221,7 +221,7 @@ async function handleSignOut() {
 }
 
 .message.error {
-  background: #fff0f0;
+  background: #e0eff5;
   color: #e57373;
 }
 
@@ -321,7 +321,7 @@ async function handleSignOut() {
 .logout-btn:hover {
   border-color: #e57373;
   color: #e57373;
-  background: #fff5f5;
+  background: #f0f7fa;
 }
 
 .logout-btn:active {

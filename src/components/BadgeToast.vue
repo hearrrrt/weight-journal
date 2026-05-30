@@ -115,8 +115,8 @@ function handleDismiss() {
   gap: 2px;
   padding: 12px;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, #fff5f5, #fdf2ff);
-  border: 1px solid #ffd4de;
+  background: linear-gradient(135deg, #f0f7fa, #f0f8ff);
+  border: 1px solid #b3dff0;
 }
 
 .toast-badge-icon {

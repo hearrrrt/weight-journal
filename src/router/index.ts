@@ -43,14 +43,23 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, _from, next) => {
-  const { data } = await supabase.auth.getSession()
-  const isLoggedIn = !!data.session
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next('/auth')
-  } else if (to.path === '/auth' && isLoggedIn) {
-    next('/')
-  } else {
-    next()
+  try {
+    const { data } = await supabase.auth.getSession()
+    const isLoggedIn = !!data.session
+    if (to.meta.requiresAuth && !isLoggedIn) {
+      next('/auth')
+    } else if (to.path === '/auth' && isLoggedIn) {
+      next('/')
+    } else {
+      next()
+    }
+  } catch {
+    // Supabase not configured — allow navigation to auth page
+    if (to.meta.requiresAuth) {
+      next('/auth')
+    } else {
+      next()
+    }
   }
 })
 

@@ -41,12 +41,12 @@ const chartData = computed<ChartData<'line'>>(() => {
       {
         label: '体重 (斤)',
         data: sortedLogs.value.map((l) => l.weight),
-        borderColor: '#ff9a9e',
-        backgroundColor: 'rgba(255, 154, 158, 0.1)',
+        borderColor: '#5badce',
+        backgroundColor: 'rgba(91, 173, 206, 0.1)',
         fill: true,
         tension: 0.4,
         pointRadius: 3,
-        pointBackgroundColor: '#ff9a9e',
+        pointBackgroundColor: '#5badce',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
         pointHoverRadius: 6,
@@ -63,8 +63,8 @@ const chartOptions: ChartOptions<'line'> = {
     tooltip: {
       backgroundColor: 'rgba(255, 255, 255, 0.95)',
       titleColor: '#555',
-      bodyColor: '#ff9a9e',
-      borderColor: '#ffd4de',
+      bodyColor: '#5badce',
+      borderColor: '#b3dff0',
       borderWidth: 1,
       cornerRadius: 12,
       padding: 10,
@@ -86,7 +86,7 @@ const chartOptions: ChartOptions<'line'> = {
     },
     y: {
       grid: {
-        color: 'rgba(255, 154, 158, 0.08)',
+        color: 'rgba(91, 173, 206, 0.08)',
       },
       ticks: {
         color: '#ccc',

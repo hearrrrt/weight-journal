@@ -52,14 +52,19 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function signUp(email: string, password: string, nickname: string) {
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nickname },
+        emailRedirectTo: window.location.origin,
+      },
+    })
     if (error) throw error
-    user.value = data.user
-    if (data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        nickname,
-      })
+    // Trigger auto-creates profile with nickname from user_metadata
+    // If email confirmation is on, session will be null — user needs to verify first
+    if (data.session) {
+      user.value = data.user
       await fetchProfile()
     }
   }

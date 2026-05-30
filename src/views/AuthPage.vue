@@ -11,6 +11,7 @@ const email = ref('')
 const password = ref('')
 const nickname = ref('')
 const error = ref('')
+const success = ref('')
 const loading = ref(false)
 
 const title = computed(() => (isRegister.value ? '一起开始减肥吧' : '欢迎回来'))
@@ -29,6 +30,7 @@ function toggleMode() {
 
 async function submit() {
   error.value = ''
+  success.value = ''
   if (!email.value || !password.value) {
     error.value = '请填写邮箱和密码'
     return
@@ -41,10 +43,11 @@ async function submit() {
   try {
     if (isRegister.value) {
       await userStore.signUp(email.value, password.value, nickname.value.trim())
+      success.value = '注册成功！请检查邮箱中的确认邮件，点击链接后即可登录。'
     } else {
       await userStore.signIn(email.value, password.value)
+      router.push('/')
     }
-    router.push('/')
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : '操作失败，请稍后重试'
     error.value = msg
@@ -57,7 +60,7 @@ async function submit() {
 <template>
   <div class="auth-page">
     <div class="auth-card">
-      <div class="auth-emoji">🐣</div>
+      <div class="auth-emoji">(｡･ω･｡)ﾉ♡</div>
       <h1 class="auth-title">{{ title }}</h1>
       <p class="auth-subtitle">{{ subtitle }}</p>
 
@@ -92,6 +95,7 @@ async function submit() {
           />
         </div>
 
+        <p v-if="success" class="auth-success">{{ success }}</p>
         <p v-if="error" class="auth-error">{{ error }}</p>
 
         <button type="submit" class="auth-btn" :disabled="loading">
@@ -124,10 +128,11 @@ async function submit() {
 }
 
 .auth-emoji {
-  font-size: 72px;
+  font-size: 36px;
+  font-weight: 500;
   line-height: 1;
   margin-bottom: 12px;
-  animation: bounce 2s ease-in-out infinite;
+  color: var(--pink);
 }
 
 @keyframes bounce {
@@ -176,7 +181,7 @@ async function submit() {
 
 .auth-input:focus {
   border-color: var(--pink);
-  box-shadow: 0 0 0 4px rgba(255, 154, 158, 0.15);
+  box-shadow: 0 0 0 4px rgba(91, 173, 206, 0.15);
 }
 
 .auth-error {
@@ -184,6 +189,14 @@ async function submit() {
   color: #e86060;
   text-align: center;
   margin: 4px 0;
+}
+
+.auth-success {
+  font-size: 13px;
+  color: #4caf50;
+  text-align: center;
+  margin: 4px 0;
+  line-height: 1.6;
 }
 
 .auth-btn {

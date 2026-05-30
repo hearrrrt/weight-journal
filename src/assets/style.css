@@ -1,19 +1,19 @@
 /* src/assets/style.css */
 :root {
-  --pink: #ff9a9e;
-  --pink-light: #ffb8c6;
-  --pink-pale: #ffd4de;
-  --pink-bg: #fff5f5;
+  --pink: #5badce;
+  --pink-light: #7ec8e3;
+  --pink-pale: #b3dff0;
+  --pink-bg: #f0f7fa;
   --warm-yellow: #FFE082;
   --soft-blue: #B2EBF2;
   --text: #555;
   --text-light: #999;
   --text-lighter: #ccc;
-  --bg: #fffaf5;
+  --bg: #f5f9fb;
   --card-bg: #fff;
   --radius: 16px;
   --radius-lg: 24px;
-  --shadow: 0 4px 16px rgba(255, 150, 150, 0.08);
+  --shadow: 0 4px 16px rgba(91, 173, 206, 0.08);
 }
 
 * {

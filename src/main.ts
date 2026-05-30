@@ -11,8 +11,13 @@ async function bootstrap() {
   app.use(pinia)
   app.use(router)
 
-  const userStore = useUserStore()
-  await userStore.initSession()
+  try {
+    const userStore = useUserStore()
+    await userStore.initSession()
+  } catch {
+    // Supabase not configured — app runs in offline mode
+    console.warn('Supabase not available, running in offline mode')
+  }
 
   app.mount('#app')
 }

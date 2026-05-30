@@ -52,9 +52,9 @@ defineProps<{
 
 /* ---- Unlocked ---- */
 .badge-card.unlocked {
-  background: linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1);
+  background: linear-gradient(135deg, #5badce, #b3dff0, #7ec8e3);
   border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(255, 154, 158, 0.25);
+  box-shadow: 0 4px 16px rgba(91, 173, 206, 0.25);
 }
 
 .badge-card.unlocked:active {

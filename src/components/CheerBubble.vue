@@ -42,7 +42,7 @@ function formatTime(dateStr: string): string {
 }
 
 .bubble.mine {
-  background: linear-gradient(135deg, #fff0f0, #fff5f5);
+  background: linear-gradient(135deg, #e0eff5, #f0f7fa);
   text-align: right;
 }
 
