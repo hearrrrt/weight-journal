@@ -152,11 +152,10 @@ onMounted(async () => {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--card-bg);
+  background: linear-gradient(135deg, #fffdf5, #fff8e1);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   border: 1px solid #ffeaa7;
-  background: linear-gradient(135deg, #fffdf5, #fff8e1);
 }
 
 .reward-icon {

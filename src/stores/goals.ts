@@ -16,8 +16,6 @@ export const useGoalsStore = defineStore('goals', () => {
     goals.value.filter(g => g.status === 'completed')
   )
 
-  const startWeight = ref<number | null>(null)
-
   async function fetchGoals() {
     if (!userStore.user) return
     const { data } = await supabase
@@ -74,5 +72,5 @@ export const useGoalsStore = defineStore('goals', () => {
     goals.value = goals.value.filter(g => g.id !== id)
   }
 
-  return { goals, currentGoal, completedGoals, startWeight, fetchGoals, addGoal, updateGoal, completeGoal, deleteGoal }
+  return { goals, currentGoal, completedGoals, fetchGoals, addGoal, updateGoal, completeGoal, deleteGoal }
 })
