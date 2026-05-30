@@ -59,13 +59,14 @@ async function fetchData() {
 
   loading.value = true
   try {
-    // Fetch partner's recent logs
+    // Fetch both partners' recent logs
+    const userId = userStore.user!.id
     const { data: logData, error: logError } = await supabase
       .from('weight_logs')
       .select('*')
-      .eq('user_id', userStore.profile.partner_id)
+      .or(`user_id.eq.${userId},user_id.eq.${userStore.profile.partner_id}`)
       .order('log_date', { ascending: false })
-      .limit(30)
+      .limit(50)
 
     if (logError) {
       console.error('Failed to fetch partner logs:', logError.message)
@@ -96,6 +97,16 @@ async function fetchData() {
 
 function isMyCheer(cheer: Cheer): boolean {
   return cheer.from_user === userId.value
+}
+
+function isMyLog(log: WeightLog): boolean {
+  return log.user_id === userId.value
+}
+
+function logOwnerName(log: WeightLog): string {
+  return log.user_id === userId.value
+    ? (userStore.profile?.nickname ?? '我')
+    : partnerNickname.value
 }
 
 function cheerFromName(cheer: Cheer): string {
@@ -187,8 +198,8 @@ onMounted(async () => {
     <!-- Partner bound but no logs -->
     <div v-else-if="logs.length === 0" class="empty-state">
       <span class="empty-icon">📝</span>
-      <p class="empty-title">她还没有开始打卡呢</p>
-      <p class="empty-hint">等 {{ partnerNickname }} 开始记录体重后，就可以在这里互动啦</p>
+      <p class="empty-title">还没有打卡记录呢</p>
+      <p class="empty-hint">开始记录体重后，就可以在这里互动啦</p>
     </div>
 
     <!-- Log cards with cheers -->
@@ -196,6 +207,7 @@ onMounted(async () => {
       <div v-for="log in logs" :key="log.id" class="log-card">
         <!-- Log info -->
         <div class="log-header">
+          <span class="log-owner" :class="{ mine: isMyLog(log) }">{{ logOwnerName(log) }}</span>
           <span class="log-date">{{ formatDate(log.log_date) }}</span>
           <span v-if="log.mood" class="log-mood">{{ moodText(log.mood) }}</span>
         </div>
@@ -215,8 +227,8 @@ onMounted(async () => {
           />
         </div>
 
-        <!-- Cheer input toggle -->
-        <div class="cheer-actions">
+        <!-- Cheer input toggle (only on partner's logs) -->
+        <div v-if="!isMyLog(log)" class="cheer-actions">
           <button
             class="toggle-btn"
             @click="toggleInput(log.id)"
@@ -330,6 +342,20 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.log-owner {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--pink-bg);
+  color: var(--pink);
+  font-weight: 500;
+}
+
+.log-owner.mine {
+  background: #e8f5e9;
+  color: #66bb6a;
 }
 
 .log-date {
