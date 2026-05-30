@@ -132,7 +132,8 @@ async function submit() {
   font-weight: 500;
   line-height: 1;
   margin-bottom: 12px;
-  color: var(--pink);
+  color: var(--text);
+  animation: bounce 2s ease-in-out infinite;
 }
 
 @keyframes bounce {
@@ -181,7 +182,7 @@ async function submit() {
 
 .auth-input:focus {
   border-color: var(--pink);
-  box-shadow: 0 0 0 4px rgba(91, 173, 206, 0.15);
+  box-shadow: 0 0 0 4px rgba(255, 154, 158, 0.15);
 }
 
 .auth-error {

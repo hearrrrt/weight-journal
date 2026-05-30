@@ -43,6 +43,16 @@ export interface Cheer {
   created_at: string
 }
 
+export interface BodyMeasurement {
+  id: string
+  user_id: string
+  waist: number | null
+  hip: number | null
+  thigh: number | null
+  log_date: string
+  created_at: string
+}
+
 export interface BadgeDefinition {
   key: string
   name: string

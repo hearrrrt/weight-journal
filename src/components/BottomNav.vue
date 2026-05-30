@@ -8,6 +8,7 @@ const tabs = [
   { path: '/goals', icon: '🎯', label: '目标' },
   { path: '/badges', icon: '🏅', label: '徽章' },
   { path: '/cheers', icon: '💕', label: '互动' },
+  { path: '/measurements', icon: '📏', label: '尺寸' },
   { path: '/settings', icon: '⚙️', label: '设置' },
 ]
 
@@ -40,7 +41,7 @@ function isActive(path: string) {
   justify-content: space-around;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-top: 1px solid #e0eff5;
+  border-top: 1px solid #fff0f0;
   padding: 8px 0 env(safe-area-inset-bottom, 8px);
   z-index: 100;
 }
@@ -65,11 +66,11 @@ function isActive(path: string) {
 }
 
 .nav-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .nav-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
 }
 </style>

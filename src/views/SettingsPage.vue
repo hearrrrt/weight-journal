@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
@@ -7,7 +7,8 @@ const userStore = useUserStore()
 const router = useRouter()
 
 // Section 1: Profile
-const nicknameInput = ref(userStore.profile?.nickname || '')
+const nicknameInput = ref('')
+const currentNickname = computed(() => userStore.profile?.nickname || '')
 const savingNickname = ref(false)
 const nicknameMessage = ref('')
 
@@ -26,6 +27,8 @@ async function handleSaveNickname() {
   savingNickname.value = true
   try {
     await userStore.updateNickname(nicknameInput.value.trim())
+    await userStore.fetchProfile()
+    nicknameInput.value = ''
     nicknameMessage.value = '昵称已保存！'
   } catch (e: unknown) {
     if (e instanceof Error) {
@@ -75,12 +78,15 @@ async function handleSignOut() {
     <!-- Section 1: Profile -->
     <div class="card section">
       <h3 class="card-title">👤 个人资料</h3>
+      <div v-if="currentNickname" class="current-name">
+        当前昵称：<span class="current-name-value">{{ currentNickname }}</span>
+      </div>
       <div class="form-group">
-        <label class="form-label">昵称</label>
+        <label class="form-label">修改昵称</label>
         <input
           v-model="nicknameInput"
           type="text"
-          placeholder="输入你的昵称"
+          placeholder="输入新昵称"
           class="form-input"
           maxlength="20"
         />
@@ -174,6 +180,20 @@ async function handleSignOut() {
   margin-bottom: 14px;
 }
 
+.current-name {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  background: var(--pink-bg);
+  border-radius: 12px;
+}
+
+.current-name-value {
+  color: var(--pink);
+  font-weight: 600;
+}
+
 /* Form */
 .form-group {
   display: flex;
@@ -221,7 +241,7 @@ async function handleSignOut() {
 }
 
 .message.error {
-  background: #e0eff5;
+  background: #fff0f0;
   color: #e57373;
 }
 
@@ -321,7 +341,7 @@ async function handleSignOut() {
 .logout-btn:hover {
   border-color: #e57373;
   color: #e57373;
-  background: #f0f7fa;
+  background: #fff5f5;
 }
 
 .logout-btn:active {

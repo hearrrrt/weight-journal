@@ -19,7 +19,7 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
   { key: 'weight_4', name: '稳步向前', description: '累计减重 4 斤', icon: '🌸', category: 'weight', condition: 'totalLoss >= 4' },
   { key: 'weight_6', name: '半程已过', description: '累计减重 6 斤', icon: '🎯', category: 'weight', condition: 'totalLoss >= 6' },
   { key: 'weight_10', name: '近在咫尺', description: '累计减重 10 斤', icon: '💫', category: 'weight', condition: 'totalLoss >= 10' },
-  { key: 'weight_12', name: '达成百斤', description: '累计减重 12 斤', icon: '👑', category: 'weight', condition: 'totalLoss >= 12' },
+  { key: 'weight_12', name: '达成百斤', description: '体重达到 100 斤', icon: '👑', category: 'weight', condition: 'weight <= 100' },
 
   // ---- 目标成就 (Goal) ----
   { key: 'goal_1st', name: '旗开得胜', description: '完成第 1 个目标', icon: '🚩', category: 'goal', condition: 'completed >= 1' },
@@ -149,7 +149,7 @@ export const useBadgesStore = defineStore('badges', () => {
           eligible = weightStore.totalLoss !== null && weightStore.totalLoss >= 10
           break
         case 'weight_12':
-          eligible = weightStore.totalLoss !== null && weightStore.totalLoss >= 12
+          eligible = weightStore.latestWeight !== null && weightStore.latestWeight <= 100
           break
 
         // -- Goal --

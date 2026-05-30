@@ -204,7 +204,7 @@ onMounted(async () => {
 /* Add Form */
 .add-form {
   background: var(--card-bg);
-  border: 2px solid #e0eff5;
+  border: 2px solid #fff0f0;
   border-radius: var(--radius-lg);
   padding: 20px;
   margin-bottom: 20px;
@@ -261,7 +261,7 @@ onMounted(async () => {
 }
 
 .message.error {
-  background: #e0eff5;
+  background: #fff0f0;
   color: #e57373;
 }
 

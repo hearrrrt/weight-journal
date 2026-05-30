@@ -43,7 +43,7 @@ defineProps<{
   padding: 28px 24px;
   color: #fff;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(91, 173, 206, 0.3);
+  box-shadow: 0 8px 32px rgba(255, 154, 158, 0.3);
 }
 
 .watermark {

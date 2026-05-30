@@ -61,7 +61,7 @@ function formatDate(dateStr: string | null) {
 <style scoped>
 .goal-card {
   background: var(--card-bg);
-  border: 2px solid #e0eff5;
+  border: 2px solid #fff0f0;
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 12px;
@@ -165,6 +165,6 @@ function formatDate(dateStr: string | null) {
 }
 
 .btn-delete:hover {
-  background: #e0eff5;
+  background: #fff0f0;
 }
 </style>
